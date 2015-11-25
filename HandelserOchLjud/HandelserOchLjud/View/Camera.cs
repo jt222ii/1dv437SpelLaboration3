@@ -12,6 +12,7 @@ namespace HandelserOchLjud
         private int sizeOfField;
         private int windowSizeX;
         private int windowSizeY;
+        public int bordersize = 64;
         public void setSizeOfField(Viewport port)
         {
             windowSizeX = port.Width;
@@ -24,11 +25,12 @@ namespace HandelserOchLjud
             {
                 sizeOfField = windowSizeY;
             }
+            sizeOfField -= bordersize * 2;
         }
-        public Vector2 convertToVisualCoords(Vector2 coords, float width, float height, float scale)
+        public Vector2 convertToVisualCoords(Vector2 coords, float scale, float? width = 0, float? height = 0)
         {
-            float visualX = coords.X * sizeOfField - (width / 2) * scale;
-            float visualY = coords.Y * sizeOfField - (height / 2) * scale;
+            float visualX = coords.X * sizeOfField + bordersize - ((float)width / 2) * scale;
+            float visualY = coords.Y * sizeOfField + bordersize - ((float)height / 2) * scale;
             return new Vector2(visualX, visualY);
         }
 

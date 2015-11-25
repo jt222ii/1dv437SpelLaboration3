@@ -8,13 +8,14 @@ namespace HandelserOchLjud.Model
 {
     class BallSimulation
     {
+        private static Random rand = new Random();
         private List<Ball> balls = new List<Ball>();
         int maxBalls = 10;
         public BallSimulation()
         {
             for (int i = 0; i < maxBalls; i++)
             {
-                balls.Add(new Ball());
+                balls.Add(new Ball(rand));
             }
         }
 
@@ -37,6 +38,11 @@ namespace HandelserOchLjud.Model
             {
                 ball.setNewSpeedY();
             }
+        }
+
+        public List<Ball> getBalls()
+        {
+            return balls;
         }
     }
 }

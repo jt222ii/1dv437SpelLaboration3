@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using HandelserOchLjud.Model;
+using HandelserOchLjud.View;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -12,10 +14,18 @@ namespace HandelserOchLjud.Controller
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
+        BallView ballView;
+        BallSimulation ballSimulation;
+        Texture2D ballTexture;
+        Camera camera = new Camera();
         public MasterController()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            graphics.PreferredBackBufferWidth = 900;  // set this value to the desired width of your window
+            graphics.PreferredBackBufferHeight = 900;
+            graphics.ApplyChanges();
+
         }
 
         /// <summary>
@@ -38,8 +48,11 @@ namespace HandelserOchLjud.Controller
         protected override void LoadContent()
         {
             // Create a new SpriteBatch, which can be used to draw textures.
+            camera.setSizeOfField(graphics.GraphicsDevice.Viewport);
             spriteBatch = new SpriteBatch(GraphicsDevice);
-
+            ballTexture = Content.Load<Texture2D>("aqua-ball.png");
+            ballSimulation = new BallSimulation();
+            ballView = new BallView(graphics, ballSimulation, ballTexture, camera);
             // TODO: use this.Content to load your game content here
         }
 
@@ -63,7 +76,7 @@ namespace HandelserOchLjud.Controller
                 Exit();
 
             // TODO: Add your update logic here
-
+            ballSimulation.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
             base.Update(gameTime);
         }
 
@@ -76,7 +89,7 @@ namespace HandelserOchLjud.Controller
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
-
+            ballView.Draw(spriteBatch);
             base.Draw(gameTime);
         }
     }

@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Content;
 using HandelserOchLjud;
 using HandelserOchLjud.Model;
 
-namespace Ball.View
+namespace HandelserOchLjud.View
 {
     class BallView
     {
@@ -27,22 +27,23 @@ namespace Ball.View
             _ballCenter = new Vector2(_ball.Width / 2, _ball.Height / 2);
             
             int screenSize = _camera.getSizeOfField();
-            _rect = new Rectangle(0,0,screenSize,screenSize);
+            _rect = new Rectangle(_camera.bordersize, _camera.bordersize, screenSize, screenSize);
             _background = new Texture2D(graphics.GraphicsDevice, 1, 1);
             _background.SetData(new Color[] { Color.Tomato });
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Begin();
+            spriteBatch.Begin(SpriteSortMode.FrontToBack);
+            foreach (Ball ball in _ballSimulation.getBalls())
+            {
+                spriteBatch.Draw(_background, _rect, Color.White);
+                Vector2 ballLogicalLocation = ball.position;
 
-            spriteBatch.Draw(_background, _rect, Color.White);
-            Vector2 ballLogicalLocation = _ballSimulation.getPosition();
-
-            float scale = _camera.Scale(_ball.Width, _ballSimulation.getBallRadius()*2);
-            var ballVisualLocation = _camera.convertToVisualCoords(ballLogicalLocation, _ball.Width, _ball.Height, scale);
-            spriteBatch.Draw(_ball, ballVisualLocation, null, Color.White, 0, _ballCenter, scale, SpriteEffects.None, 0);
-
+                float scale = _camera.Scale(ball.radius*2,_ball.Width);
+                var ballVisualLocation = _camera.convertToVisualCoords(ballLogicalLocation, scale);
+                spriteBatch.Draw(_ball, ballVisualLocation, null, Color.White, 0, _ballCenter, scale, SpriteEffects.None, 1);
+            }
             spriteBatch.End();
             
         }

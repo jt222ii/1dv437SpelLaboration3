@@ -9,11 +9,21 @@ namespace HandelserOchLjud.Model
     class Ball
     {
         float _radius = 0.05f;
-        Vector2 _speed = new Vector2(0.21f, 0.41f);
+        float maxSpeed = 1f;
+        float minSpeed = 0.2f;
+        Vector2 velocity;
         Vector2 _position;
-        public Ball()
+        Vector2 randomDirection;
+        
+        public Ball(Random rand)
         {
             _position = new Vector2(0.3f, 0.2f);
+            randomDirection = new Vector2((float)rand.NextDouble() - 0.5f, (float)rand.NextDouble() - 0.5f);
+            //normalize to get it spherical vector with length 1.0
+            randomDirection.Normalize();
+            //add random length between 0 to maxSpeed
+            randomDirection = randomDirection * ((float)rand.NextDouble() * maxSpeed + minSpeed);
+            velocity = randomDirection;
         }
         public float radius
         {
@@ -26,7 +36,7 @@ namespace HandelserOchLjud.Model
         {
             get
             {
-                return _speed;
+                return velocity;
             }
         }
         public Vector2 position
@@ -38,16 +48,16 @@ namespace HandelserOchLjud.Model
         }
         public void setNewPos(float time)
         {
-            _position += _speed * time;
+            _position += velocity * time;
         }
 
         public void setNewSpeedX()
         {
-            _speed.X = -speed.X;
+            velocity.X = -speed.X;
         }
         public void setNewSpeedY()
         {
-            _speed.Y = -speed.Y;
+            velocity.Y = -speed.Y;
         }
     }
 }
