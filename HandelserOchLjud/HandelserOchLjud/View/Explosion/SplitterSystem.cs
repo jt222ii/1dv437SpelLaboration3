@@ -12,7 +12,7 @@ namespace HandelserOchLjud.View.Explosion
         private float particlesLifeTime = 4f;
         private float timeLived = 0;
         private List<SplitterParticle> particles = new List<SplitterParticle>();
-        private int maxParticles = 500;
+        private int maxParticles = 100;
         private static Random rand = new Random();
         public SplitterSystem(Texture2D spark, Texture2D secondSpark, SpriteBatch spriteBatch, Camera camera, float scale, Vector2 startLocation)
         {
@@ -31,22 +31,15 @@ namespace HandelserOchLjud.View.Explosion
             }
         }
 
-        public void Draw()
+        public void Draw(float timeElapsed)
         {
             foreach (SplitterParticle particle in particles)
             {
+                particle.move(timeElapsed);
                 particle.Draw();
             }
-        }
-
-        public void Update(float timeElapsed)
-        {           
-            foreach (SplitterParticle particle in particles)
-            {
-                particle.move(timeElapsed);
-            }
             timeLived += timeElapsed;
-            if(timeLived >= particlesLifeTime)
+            if (timeLived >= particlesLifeTime)
             {
                 particles.Clear();
             }

@@ -17,7 +17,7 @@ namespace HandelserOchLjud.Model
         
         public Ball(Random rand)
         {
-            _position = new Vector2(0.3f, 0.2f);
+            _position = new Vector2((float)rand.NextDouble() * (0.9f - 0.1f) + 0.1f, (float)rand.NextDouble() * (0.9f - 0.1f) + 0.1f);
             randomDirection = new Vector2((float)rand.NextDouble() - 0.5f, (float)rand.NextDouble() - 0.5f);
             //normalize to get it spherical vector with length 1.0
             randomDirection.Normalize();

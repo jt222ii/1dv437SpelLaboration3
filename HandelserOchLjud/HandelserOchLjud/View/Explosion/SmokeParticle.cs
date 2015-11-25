@@ -81,7 +81,7 @@ namespace HandelserOchLjud.View.Explosion
         {
             float scale = camera.Scale(particleSize, _smoke.Width);
             Color color = new Color(fade, fade, fade, fade);
-            spriteBatch.Draw(_smoke, camera.convertToVisualCoords(position, _smoke.Width, _smoke.Height, scale), null, color, rotation, randomDirection, scale, SpriteEffects.None, 0.1f);
+            spriteBatch.Draw(_smoke, camera.convertToVisualCoords(position, scale, _smoke.Width, _smoke.Height), null, color, rotation, randomDirection, scale, SpriteEffects.None, 1f);
         }
     }
 }

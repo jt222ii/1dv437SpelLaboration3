@@ -40,7 +40,7 @@ namespace HandelserOchLjud.View.Explosion
             particleSize = (particleMinSize + lifePercent * particleMaxSize) * scale;
             Color color = new Color(fade, fade, fade, fade);
             float sscale = _camera.Scale(particleSize, texture.Width);
-            _spriteBatch.Draw(texture, _camera.convertToVisualCoords(position, texture.Width, texture.Height, sscale), null, color, 0, Vector2.Zero, sscale, SpriteEffects.None, 0.1f);
+            _spriteBatch.Draw(texture, _camera.convertToVisualCoords(position, sscale, texture.Width, texture.Height), null, color, 0, Vector2.Zero, sscale, SpriteEffects.None, 1f);
         }
     }
 }

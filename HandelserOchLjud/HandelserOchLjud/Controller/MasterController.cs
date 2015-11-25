@@ -1,6 +1,7 @@
 ﻿using HandelserOchLjud.Model;
 using HandelserOchLjud.View;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -16,8 +17,8 @@ namespace HandelserOchLjud.Controller
 
         BallView ballView;
         BallSimulation ballSimulation;
-        Texture2D ballTexture;
         Camera camera = new Camera();
+        MouseState lastMouseState;
         public MasterController()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -50,9 +51,16 @@ namespace HandelserOchLjud.Controller
             // Create a new SpriteBatch, which can be used to draw textures.
             camera.setSizeOfField(graphics.GraphicsDevice.Viewport);
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            ballTexture = Content.Load<Texture2D>("aqua-ball.png");
+            Texture2D ballTexture = Content.Load<Texture2D>("aqua-ball.png");
+            Texture2D splitterTexture = Content.Load<Texture2D>("Spark3");
+            Texture2D splitterSecondTexture = Content.Load<Texture2D>("Spark2");
+            Texture2D smokeTexture = Content.Load<Texture2D>("Smoketest");
+            Texture2D explosionTexture = Content.Load<Texture2D>("Fixforshittyschoolcomputer");
+            Texture2D shockwaveTexture = Content.Load<Texture2D>("Shockwave2");
+            SoundEffect fireSound = Content.Load<SoundEffect>("fire");
             ballSimulation = new BallSimulation();
-            ballView = new BallView(graphics, ballSimulation, ballTexture, camera);
+            ballView = new BallView(graphics, ballSimulation, ballTexture, camera, splitterTexture, splitterSecondTexture, smokeTexture, explosionTexture, shockwaveTexture, fireSound);
+
             // TODO: use this.Content to load your game content here
         }
 
@@ -74,7 +82,13 @@ namespace HandelserOchLjud.Controller
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-
+            //Mouse click help from http://stackoverflow.com/a/9719528
+            var mouseState = Mouse.GetState();
+            if (lastMouseState.LeftButton == ButtonState.Released && mouseState.LeftButton == ButtonState.Pressed)
+            {
+                ballView.NewExplosion(mouseState.X, mouseState.Y, spriteBatch);
+            }
+            lastMouseState = mouseState;
             // TODO: Add your update logic here
             ballSimulation.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
             base.Update(gameTime);
@@ -87,9 +101,8 @@ namespace HandelserOchLjud.Controller
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-
             // TODO: Add your drawing code here
-            ballView.Draw(spriteBatch);
+            ballView.Draw(spriteBatch, (float)gameTime.ElapsedGameTime.TotalSeconds);
             base.Draw(gameTime);
         }
     }

@@ -11,53 +11,37 @@ namespace HandelserOchLjud
 {
     class ExplosionView
     {
-        private ContentManager _content;
         private Camera _camera;
         private SpriteBatch _spriteBatch;
-        private Texture2D splitterTexture;
-        private Texture2D splitterSecondTexture;
-        private Texture2D smokeTexture;
-        private Texture2D shockwaveTexture;
-        private Texture2D explosionTexture;
+
 
         private SplitterSystem splitterSystem;
         private SmokeSystem smokeSystem;
         private Explosion2d explosion;
         private shockwave shockwave;
-        public ExplosionView(ContentManager content, Camera camera, SpriteBatch spriteBatch, Vector2 startLocation, float scale)
+        public ExplosionView(Camera camera, SpriteBatch spriteBatch, Vector2 startLocation, float scale, Texture2D splitterTexture, Texture2D splitterSecondTexture, Texture2D smokeTexture, Texture2D explosionTexture, Texture2D shockwaveTexture)
         {
-            _content = content;
             _camera = camera;
             _spriteBatch = spriteBatch;
 
-            splitterSecondTexture = _content.Load<Texture2D>("Spark2");
-            splitterTexture = _content.Load<Texture2D>("Spark3");
+
             splitterSystem = new SplitterSystem(splitterTexture, splitterSecondTexture, _spriteBatch, _camera, scale, startLocation);
-
-            smokeTexture = _content.Load<Texture2D>("Smoketest");
             smokeSystem = new SmokeSystem(smokeTexture, scale, startLocation);
-
-            explosionTexture = _content.Load<Texture2D>("Fixforshittyschoolcomputer");
             explosion = new Explosion2d(_spriteBatch, explosionTexture, _camera, scale, startLocation);
-
-
-            shockwaveTexture = _content.Load<Texture2D>("Shockwave2");
             shockwave = new shockwave(_spriteBatch, shockwaveTexture, _camera, scale, startLocation);
         }
-        public void UpdateExplosion(GameTime gameTime)
+        public void UpdateExplosion(float timeElapsed)
         {
-            float timeElapsedSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
-            splitterSystem.Update(timeElapsedSeconds);
-            smokeSystem.Update(timeElapsedSeconds);
+            splitterSystem.Draw(timeElapsed);
+            smokeSystem.Update(timeElapsed);
         }
-        public void DrawExplosion(GameTime gameTime)
+        public void DrawExplosion(float timeElapsed)
         {
-            _spriteBatch.Begin(SpriteSortMode.FrontToBack);
-            splitterSystem.Draw();
+            splitterSystem.Draw(timeElapsed);
             smokeSystem.Draw(_spriteBatch, _camera);
-            explosion.Draw((float)gameTime.ElapsedGameTime.TotalSeconds);
-            shockwave.Draw((float)gameTime.ElapsedGameTime.TotalSeconds);
-            _spriteBatch.End();
+            explosion.Draw(timeElapsed);
+            shockwave.Draw(timeElapsed);
+                 
         }
     }
 }
