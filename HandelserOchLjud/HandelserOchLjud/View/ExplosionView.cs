@@ -19,19 +19,21 @@ namespace HandelserOchLjud
         private SmokeSystem smokeSystem;
         private Explosion2d explosion;
         private shockwave shockwave;
-        public ExplosionView(Camera camera, SpriteBatch spriteBatch, Vector2 startLocation, float scale, Texture2D splitterTexture, Texture2D splitterSecondTexture, Texture2D smokeTexture, Texture2D explosionTexture, Texture2D shockwaveTexture)
+        float time = 0;
+        float timeBeforeDelete = 3;
+        public ExplosionView(Camera camera, SpriteBatch spriteBatch, Vector2 startLocation, float componentsSize, Texture2D splitterTexture, Texture2D splitterSecondTexture, Texture2D smokeTexture, Texture2D explosionTexture, Texture2D shockwaveTexture)
         {
             _camera = camera;
             _spriteBatch = spriteBatch;
 
-
-            splitterSystem = new SplitterSystem(splitterTexture, splitterSecondTexture, _spriteBatch, _camera, scale, startLocation);
-            smokeSystem = new SmokeSystem(smokeTexture, scale, startLocation);
-            explosion = new Explosion2d(_spriteBatch, explosionTexture, _camera, scale, startLocation);
-            shockwave = new shockwave(_spriteBatch, shockwaveTexture, _camera, scale, startLocation);
+            splitterSystem = new SplitterSystem(splitterTexture, splitterSecondTexture, _spriteBatch, _camera, componentsSize, startLocation);
+            smokeSystem = new SmokeSystem(smokeTexture, componentsSize, startLocation);
+            explosion = new Explosion2d(_spriteBatch, explosionTexture, _camera, componentsSize, startLocation);
+            shockwave = new shockwave(_spriteBatch, shockwaveTexture, _camera, componentsSize, startLocation);
         }
         public void UpdateExplosion(float timeElapsed)
         {
+            time += timeElapsed;
             splitterSystem.Draw(timeElapsed);
             smokeSystem.Update(timeElapsed);
         }
@@ -40,8 +42,11 @@ namespace HandelserOchLjud
             splitterSystem.Draw(timeElapsed);
             smokeSystem.Draw(_spriteBatch, _camera);
             explosion.Draw(timeElapsed);
-            shockwave.Draw(timeElapsed);
-                 
+            shockwave.Draw(timeElapsed);      
+        }
+        public bool livedItsTime()
+        {
+            return time >= timeBeforeDelete;
         }
     }
 }

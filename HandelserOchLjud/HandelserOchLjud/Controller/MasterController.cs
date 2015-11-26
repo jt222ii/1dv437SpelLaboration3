@@ -58,6 +58,7 @@ namespace HandelserOchLjud.Controller
             Texture2D explosionTexture = Content.Load<Texture2D>("Fixforshittyschoolcomputer");
             Texture2D shockwaveTexture = Content.Load<Texture2D>("Shockwave2");
             SoundEffect fireSound = Content.Load<SoundEffect>("fire");
+            
             ballSimulation = new BallSimulation();
             ballView = new BallView(graphics, ballSimulation, ballTexture, camera, splitterTexture, splitterSecondTexture, smokeTexture, explosionTexture, shockwaveTexture, fireSound);
 

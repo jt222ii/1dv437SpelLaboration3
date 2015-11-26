@@ -27,7 +27,8 @@ namespace HandelserOchLjud.View
         private Texture2D explosionTexture;
         private SoundEffect fireSound;
 
-        private ExplosionView explosion;
+        
+        List<ExplosionView> explosions = new List<ExplosionView>();
         public BallView(GraphicsDeviceManager graphics, BallSimulation BallSimulation, Texture2D ball, Camera camera, Texture2D SplitterTexture, Texture2D SplitterSecondTexture, Texture2D SmokeTexture, Texture2D ExplosionTexture, Texture2D ShockwaveTexture, SoundEffect sound)
         {
             fireSound = sound;
@@ -49,11 +50,16 @@ namespace HandelserOchLjud.View
 
         public void Draw(SpriteBatch spriteBatch, float timeElapsed)
         {
-            spriteBatch.Begin(SpriteSortMode.FrontToBack);
-            if(explosion != null)
+            spriteBatch.Begin(SpriteSortMode.FrontToBack);            
+            foreach(ExplosionView explosion in explosions )
             {
                 explosion.UpdateExplosion(timeElapsed);
                 explosion.DrawExplosion(timeElapsed);
+            }
+            var explosionsToDelete = explosions.SingleOrDefault(e => e.livedItsTime());
+            if (explosionsToDelete != null)
+            {
+                explosions.Remove(explosionsToDelete);
             }
             foreach (Ball ball in _ballSimulation.getBalls())
             {
@@ -68,8 +74,9 @@ namespace HandelserOchLjud.View
         
         public void NewExplosion(float mCoordX, float mCoordY, SpriteBatch spriteBatch)
         {
-            fireSound.Play();
-            explosion = new ExplosionView(_camera, spriteBatch, _camera.convertToLogicalCoords(new Vector2(mCoordX, mCoordY), 0.5f), 0.5f, splitterTexture, splitterSecondTexture, smokeTexture, explosionTexture, shockwaveTexture);
+            Vector2 logicalLocation = _camera.convertMousePosToLogicalCoords(new Vector2(mCoordX, mCoordY));
+            fireSound.Play(0.1f,0,0);
+            explosions.Add(new ExplosionView(_camera, spriteBatch, logicalLocation, 0.4f, splitterTexture, splitterSecondTexture, smokeTexture, explosionTexture, shockwaveTexture));
         }
     }
 }
