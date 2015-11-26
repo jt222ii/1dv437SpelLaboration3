@@ -75,8 +75,11 @@ namespace HandelserOchLjud.View
         public void NewExplosion(float mCoordX, float mCoordY, SpriteBatch spriteBatch)
         {
             Vector2 logicalLocation = _camera.convertMousePosToLogicalCoords(new Vector2(mCoordX, mCoordY));
-            fireSound.Play(0.1f,0,0);
-            explosions.Add(new ExplosionView(_camera, spriteBatch, logicalLocation, 0.4f, splitterTexture, splitterSecondTexture, smokeTexture, explosionTexture, shockwaveTexture));
+            if (logicalLocation.X <= 1f && logicalLocation.X >= 0f && logicalLocation.Y <= 1f && logicalLocation.Y >= 0f)
+            {
+                fireSound.Play(0.1f, 0, 0);
+                explosions.Add(new ExplosionView(_camera, spriteBatch, logicalLocation, 0.4f, splitterTexture, splitterSecondTexture, smokeTexture, explosionTexture, shockwaveTexture));
+            }
         }
     }
 }
