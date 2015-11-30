@@ -15,7 +15,7 @@ namespace HandelserOchLjud.Controller
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
-        BallView ballView;
+        GameView ballView;
         BallSimulation ballSimulation;
         Camera camera = new Camera();
         MouseState lastMouseState;
@@ -52,16 +52,8 @@ namespace HandelserOchLjud.Controller
             // Create a new SpriteBatch, which can be used to draw textures.
             camera.setSizeOfField(graphics.GraphicsDevice.Viewport);
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            Texture2D ballTexture = Content.Load<Texture2D>("aqua-ball.png");
-            Texture2D splitterTexture = Content.Load<Texture2D>("Spark3");
-            Texture2D splitterSecondTexture = Content.Load<Texture2D>("Spark2");
-            Texture2D smokeTexture = Content.Load<Texture2D>("Smoketest");
-            Texture2D explosionTexture = Content.Load<Texture2D>("Fixforshittyschoolcomputer");
-            Texture2D shockwaveTexture = Content.Load<Texture2D>("Shockwave2");
-            SoundEffect fireSound = Content.Load<SoundEffect>("fire");
-            
             ballSimulation = new BallSimulation();
-            ballView = new BallView(graphics, ballSimulation, ballTexture, camera, splitterTexture, splitterSecondTexture, smokeTexture, explosionTexture, shockwaveTexture, fireSound);
+            ballView = new GameView(graphics, ballSimulation, Content, camera);
 
             // TODO: use this.Content to load your game content here
         }
