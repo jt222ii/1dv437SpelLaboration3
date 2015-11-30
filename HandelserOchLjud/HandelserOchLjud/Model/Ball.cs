@@ -33,13 +33,6 @@ namespace HandelserOchLjud.Model
                 return _radius;
             }
         }
-        public Vector2 Velocity
-        {
-            get
-            {
-                return velocity;
-            }
-        }
         public Vector2 position
         {
             get
@@ -54,11 +47,11 @@ namespace HandelserOchLjud.Model
 
         public void setNewSpeedX()
         {
-            velocity.X = -Velocity.X;
+            velocity.X = -velocity.X;
         }
         public void setNewSpeedY()
         {
-            velocity.Y = -Velocity.Y;
+            velocity.Y = -velocity.Y;
         }
 
         public bool isBallDead
