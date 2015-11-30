@@ -14,6 +14,7 @@ namespace HandelserOchLjud.Model
         Vector2 velocity;
         Vector2 _position;
         Vector2 randomDirection;
+        bool ballDead = false;
         
         public Ball(Random rand)
         {
@@ -32,7 +33,7 @@ namespace HandelserOchLjud.Model
                 return _radius;
             }
         }
-        public Vector2 speed
+        public Vector2 Velocity
         {
             get
             {
@@ -53,11 +54,17 @@ namespace HandelserOchLjud.Model
 
         public void setNewSpeedX()
         {
-            velocity.X = -speed.X;
+            velocity.X = -Velocity.X;
         }
         public void setNewSpeedY()
         {
-            velocity.Y = -speed.Y;
+            velocity.Y = -Velocity.Y;
+        }
+
+        public bool isBallDead
+        {
+            get { return ballDead; }
+            set { ballDead = value; }
         }
     }
 }

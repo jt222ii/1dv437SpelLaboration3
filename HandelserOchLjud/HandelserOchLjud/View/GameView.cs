@@ -14,16 +14,17 @@ namespace HandelserOchLjud.View
 {
     class GameView
     {
-        private float crosshairSize = 0.16f;
+        private float crosshairSize = 0.12f;
 
         private Camera _camera;
         private BallSimulation _ballSimulation;
-        private Texture2D ballTexture;
         private Rectangle _rect;
-        private Texture2D background;
         private Vector2 _ballCenter;
 
-        private Texture2D splitterTexture,
+        private Texture2D ballTexture,
+        deadBallTexture,
+        background,
+        splitterTexture,
         splitterSecondTexture,
         smokeTexture,
         shockwaveTexture,
@@ -54,7 +55,12 @@ namespace HandelserOchLjud.View
                 Vector2 ballLogicalLocation = ball.position;
                 float scale = _camera.Scale(ball.radius * 2, ballTexture.Width);
                 var ballVisualLocation = _camera.convertToVisualCoords(ballLogicalLocation, scale);
-                spriteBatch.Draw(ballTexture, ballVisualLocation, null, Color.White, 0, _ballCenter, scale, SpriteEffects.None, 0.9f);
+                if(ball.isBallDead)
+                {
+                    spriteBatch.Draw(deadBallTexture, ballVisualLocation, null, Color.White, 0, _ballCenter, scale, SpriteEffects.None, 0.9f);
+                }
+                else
+                    spriteBatch.Draw(ballTexture, ballVisualLocation, null, Color.White, 0, _ballCenter, scale, SpriteEffects.None, 0.9f);
             }
             spriteBatch.End();
         }
@@ -86,12 +92,14 @@ namespace HandelserOchLjud.View
             {
                 fireSound.Play(0.1f, 0, 0);
                 explosions.Add(new ExplosionView(_camera, spriteBatch, logicalLocation, 0.5f, splitterTexture, splitterSecondTexture, smokeTexture, explosionTexture, shockwaveTexture));
+                _ballSimulation.setDeadBalls(logicalLocation.X, logicalLocation.Y, crosshairSize/2);
             }
         }
 
         public void LoadSprites(ContentManager Content, GraphicsDeviceManager graphics)
         {
-            ballTexture = Content.Load<Texture2D>("aqua-ball.png");
+            ballTexture = Content.Load<Texture2D>("aqua-ball");
+            deadBallTexture = Content.Load<Texture2D>("aqua-ball-dead");
             splitterTexture = Content.Load<Texture2D>("Spark3");
             splitterSecondTexture = Content.Load<Texture2D>("Spark2");
             smokeTexture = Content.Load<Texture2D>("Smoketest");

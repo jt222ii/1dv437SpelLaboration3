@@ -23,8 +23,11 @@ namespace HandelserOchLjud.Model
         {
             foreach (Ball ball in balls)
             {
-                ballCollision(ball);
-                ball.setNewPos(time);
+                if (!ball.isBallDead)
+                {
+                    ballCollision(ball);
+                    ball.setNewPos(time);
+                }
             }
         }
 
@@ -37,6 +40,20 @@ namespace HandelserOchLjud.Model
             if (ball.position.Y <= 0 + ball.radius || ball.position.Y >= 1 - ball.radius)
             {
                 ball.setNewSpeedY();
+            }
+        }
+
+        public void setDeadBalls(float coordX, float coordY, float crosshairSize)
+        {
+            foreach (Ball ball in balls)
+            {
+                if( ball.position.X + ball.radius > coordX-crosshairSize &&
+                    ball.position.X - ball.radius < coordX + crosshairSize &&
+                    ball.position.Y + ball.radius > coordY - crosshairSize &&
+                    ball.position.Y - ball.radius < coordY + crosshairSize)
+                {
+                    ball.isBallDead = true;
+                }
             }
         }
 
