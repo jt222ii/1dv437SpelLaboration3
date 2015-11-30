@@ -10,6 +10,7 @@ namespace HandelserOchLjud.Model
     {
         private static Random rand = new Random();
         private List<Ball> balls = new List<Ball>();
+        private List<Ball> recentlyKilledBalls;
         int maxBalls = 10;
         public BallSimulation()
         {
@@ -45,16 +46,26 @@ namespace HandelserOchLjud.Model
 
         public void setDeadBalls(float coordX, float coordY, float crosshairSize)
         {
+            recentlyKilledBalls = new List<Ball>();
             foreach (Ball ball in balls)
             {
-                if( ball.position.X + ball.radius > coordX-crosshairSize &&
-                    ball.position.X - ball.radius < coordX + crosshairSize &&
-                    ball.position.Y + ball.radius > coordY - crosshairSize &&
-                    ball.position.Y - ball.radius < coordY + crosshairSize)
+                if (!ball.isBallDead)
                 {
-                    ball.isBallDead = true;
+                    if (ball.position.X + ball.radius > coordX - crosshairSize &&
+                        ball.position.X - ball.radius < coordX + crosshairSize &&
+                        ball.position.Y + ball.radius > coordY - crosshairSize &&
+                        ball.position.Y - ball.radius < coordY + crosshairSize)
+                    {
+                        recentlyKilledBalls.Add(ball);
+                        ball.isBallDead = true;
+                    }
                 }
             }
+        }
+        
+        public List<Ball> RecentlyKilledBalls
+        {
+            get { return recentlyKilledBalls; }
         }
 
         public List<Ball> getBalls()

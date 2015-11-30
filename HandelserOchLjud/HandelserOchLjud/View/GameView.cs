@@ -9,6 +9,7 @@ using HandelserOchLjud;
 using HandelserOchLjud.Model;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Input;
+using HandelserOchLjud.View.Explosion;
 
 namespace HandelserOchLjud.View
 {
@@ -34,6 +35,7 @@ namespace HandelserOchLjud.View
 
         
         List<ExplosionView> explosions = new List<ExplosionView>();
+        List<SmokeSystem> smokes = new List<SmokeSystem>();
         public GameView(GraphicsDeviceManager graphics, BallSimulation BallSimulation, ContentManager Content, Camera camera)
         {
             LoadSprites(Content, graphics);
@@ -61,6 +63,12 @@ namespace HandelserOchLjud.View
                 }
                 else
                     spriteBatch.Draw(ballTexture, ballVisualLocation, null, Color.White, 0, _ballCenter, scale, SpriteEffects.None, 0.9f);
+            }
+
+            foreach(SmokeSystem smokeSystems in smokes)
+            {
+                smokeSystems.Update(timeElapsed);
+                smokeSystems.Draw(spriteBatch, _camera);
             }
             spriteBatch.End();
         }
@@ -93,6 +101,10 @@ namespace HandelserOchLjud.View
                 fireSound.Play(0.1f, 0, 0);
                 explosions.Add(new ExplosionView(_camera, spriteBatch, logicalLocation, 0.5f, splitterTexture, splitterSecondTexture, smokeTexture, explosionTexture, shockwaveTexture));
                 _ballSimulation.setDeadBalls(logicalLocation.X, logicalLocation.Y, crosshairSize/2);
+                foreach(Ball ball in _ballSimulation.RecentlyKilledBalls)
+                {
+                    smokes.Add(new SmokeSystem(smokeTexture, 0.5f, ball.position, true));
+                }
             }
         }
 

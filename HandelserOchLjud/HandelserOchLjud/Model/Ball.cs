@@ -59,5 +59,6 @@ namespace HandelserOchLjud.Model
             get { return ballDead; }
             set { ballDead = value; }
         }
+        
     }
 }
