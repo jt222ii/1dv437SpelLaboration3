@@ -67,7 +67,9 @@
     <Content Include="Content\aqua-ball.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Crosshair.png" />
+    <Content Include="Content\Crosshair.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\fire.wav" />
     <Content Include="Content\Fixforshittyschoolcomputer.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,6 +39,12 @@ namespace HandelserOchLjud
             float logicalX = (visualCoords.X-bordersize)/sizeOfField;
             float logicalY = (visualCoords.Y-bordersize)/sizeOfField;
             return new Vector2(logicalX, logicalY);
+        }
+
+        public Vector2 centerTextureAtMouse(Texture2D texture, float scale)
+        {
+            var mouseState = Mouse.GetState();
+            return new Vector2(mouseState.X - texture.Width / 2 * scale, mouseState.Y - texture.Width / 2 * scale);
         }
 
         public float Scale(float size, float width)

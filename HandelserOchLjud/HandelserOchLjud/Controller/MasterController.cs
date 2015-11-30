@@ -15,7 +15,7 @@ namespace HandelserOchLjud.Controller
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
-        GameView ballView;
+        GameView gameView;
         BallSimulation ballSimulation;
         Camera camera = new Camera();
         MouseState lastMouseState;
@@ -23,10 +23,10 @@ namespace HandelserOchLjud.Controller
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            graphics.PreferredBackBufferWidth = 600;  // set this value to the desired width of your window
-            graphics.PreferredBackBufferHeight = 600;
+            graphics.PreferredBackBufferWidth = 900;  // set this value to the desired width of your window
+            graphics.PreferredBackBufferHeight = 900;
             graphics.ApplyChanges();
-            this.IsMouseVisible = true;
+            //this.IsMouseVisible = true;
 
         }
 
@@ -53,7 +53,7 @@ namespace HandelserOchLjud.Controller
             camera.setSizeOfField(graphics.GraphicsDevice.Viewport);
             spriteBatch = new SpriteBatch(GraphicsDevice);
             ballSimulation = new BallSimulation();
-            ballView = new GameView(graphics, ballSimulation, Content, camera);
+            gameView = new GameView(graphics, ballSimulation, Content, camera);
 
             // TODO: use this.Content to load your game content here
         }
@@ -80,7 +80,7 @@ namespace HandelserOchLjud.Controller
             var mouseState = Mouse.GetState();
             if (lastMouseState.LeftButton == ButtonState.Released && mouseState.LeftButton == ButtonState.Pressed)
             {
-                ballView.NewExplosion(mouseState.X, mouseState.Y, spriteBatch);
+                gameView.NewExplosion(mouseState.X, mouseState.Y, spriteBatch);
             }
             lastMouseState = mouseState;
             // TODO: Add your update logic here
@@ -96,7 +96,7 @@ namespace HandelserOchLjud.Controller
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
             // TODO: Add your drawing code here
-            ballView.Draw(spriteBatch, (float)gameTime.ElapsedGameTime.TotalSeconds);
+            gameView.Draw(spriteBatch, (float)gameTime.ElapsedGameTime.TotalSeconds);
             base.Draw(gameTime);
         }
     }

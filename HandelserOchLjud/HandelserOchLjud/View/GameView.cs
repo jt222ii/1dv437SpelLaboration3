@@ -8,11 +8,14 @@ using Microsoft.Xna.Framework.Content;
 using HandelserOchLjud;
 using HandelserOchLjud.Model;
 using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Input;
 
 namespace HandelserOchLjud.View
 {
     class GameView
     {
+        private float crosshairSize = 0.16f;
+
         private Camera _camera;
         private BallSimulation _ballSimulation;
         private Texture2D ballTexture;
@@ -20,11 +23,12 @@ namespace HandelserOchLjud.View
         private Texture2D background;
         private Vector2 _ballCenter;
 
-        private Texture2D splitterTexture;
-        private Texture2D splitterSecondTexture;
-        private Texture2D smokeTexture;
-        private Texture2D shockwaveTexture;
-        private Texture2D explosionTexture;
+        private Texture2D splitterTexture,
+        splitterSecondTexture,
+        smokeTexture,
+        shockwaveTexture,
+        explosionTexture,
+        crosshair;
         private SoundEffect fireSound;
 
         
@@ -41,8 +45,29 @@ namespace HandelserOchLjud.View
 
         public void Draw(SpriteBatch spriteBatch, float timeElapsed)
         {
-            spriteBatch.Begin(SpriteSortMode.FrontToBack);            
-            foreach(ExplosionView explosion in explosions )
+            spriteBatch.Begin(SpriteSortMode.FrontToBack);
+            DrawExplosions(timeElapsed);
+            DrawCrosshair(spriteBatch);
+            foreach (Ball ball in _ballSimulation.getBalls())
+            {
+                spriteBatch.Draw(background, _rect, Color.White);
+                Vector2 ballLogicalLocation = ball.position;
+                float scale = _camera.Scale(ball.radius * 2, ballTexture.Width);
+                var ballVisualLocation = _camera.convertToVisualCoords(ballLogicalLocation, scale);
+                spriteBatch.Draw(ballTexture, ballVisualLocation, null, Color.White, 0, _ballCenter, scale, SpriteEffects.None, 0.9f);
+            }
+            spriteBatch.End();
+        }
+
+        public void DrawCrosshair(SpriteBatch spriteBatch)
+        {
+            float scale = _camera.Scale(crosshairSize, crosshair.Width);
+            spriteBatch.Draw(crosshair, _camera.centerTextureAtMouse(crosshair, scale), null, Color.White, 0, Vector2.Zero, scale, SpriteEffects.None, 1);
+        }
+
+        public void DrawExplosions(float timeElapsed)
+        {
+            foreach (ExplosionView explosion in explosions)
             {
                 explosion.UpdateExplosion(timeElapsed);
                 explosion.DrawExplosion(timeElapsed);
@@ -52,15 +77,6 @@ namespace HandelserOchLjud.View
             {
                 explosions.Remove(explosionsToDelete);
             }
-            foreach (Ball ball in _ballSimulation.getBalls())
-            {
-                spriteBatch.Draw(background, _rect, Color.White);
-                Vector2 ballLogicalLocation = ball.position;
-                float scale = _camera.Scale(ball.radius * 2, ballTexture.Width);
-                var ballVisualLocation = _camera.convertToVisualCoords(ballLogicalLocation, scale);
-                spriteBatch.Draw(ballTexture, ballVisualLocation, null, Color.White, 0, _ballCenter, scale, SpriteEffects.None, 1);
-            }
-            spriteBatch.End();
         }
         
         public void NewExplosion(float mCoordX, float mCoordY, SpriteBatch spriteBatch)
@@ -69,7 +85,7 @@ namespace HandelserOchLjud.View
             if (logicalLocation.X <= 1f && logicalLocation.X >= 0f && logicalLocation.Y <= 1f && logicalLocation.Y >= 0f)
             {
                 fireSound.Play(0.1f, 0, 0);
-                explosions.Add(new ExplosionView(_camera, spriteBatch, logicalLocation, 0.4f, splitterTexture, splitterSecondTexture, smokeTexture, explosionTexture, shockwaveTexture));
+                explosions.Add(new ExplosionView(_camera, spriteBatch, logicalLocation, 0.5f, splitterTexture, splitterSecondTexture, smokeTexture, explosionTexture, shockwaveTexture));
             }
         }
 
@@ -82,6 +98,7 @@ namespace HandelserOchLjud.View
             explosionTexture = Content.Load<Texture2D>("Fixforshittyschoolcomputer");
             shockwaveTexture = Content.Load<Texture2D>("Shockwave2");
             fireSound = Content.Load<SoundEffect>("fire");
+            crosshair = Content.Load<Texture2D>("Crosshair");
             _ballCenter = new Vector2(ballTexture.Width / 2, ballTexture.Height / 2);
 
 
