@@ -49,7 +49,7 @@ namespace HandelserOchLjud.View.Explosion
         {
             float scale = _camera.Scale(particleSize, _spark.Width);
             Color color = new Color(fade, fade, fade, fade);
-            _spriteBatch.Draw(_spark, _camera.convertToVisualCoords(position, scale, _spark.Width, _spark.Height), null, color, 0, randomDirection, scale, SpriteEffects.None, 0.9f);
+            _spriteBatch.Draw(_spark, _camera.convertToVisualCoords(position, scale), null, color, 0, randomDirection, scale, SpriteEffects.None, 0.9f);
         }
        
         //for funzies will need to remove on the next lab

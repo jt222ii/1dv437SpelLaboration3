@@ -15,7 +15,7 @@ namespace HandelserOchLjud.View
 {
     class GameView
     {
-        private float crosshairSize = 0.12f;
+        private float crosshairSize = 0.1f;
 
         private Camera _camera;
         private BallSimulation _ballSimulation;

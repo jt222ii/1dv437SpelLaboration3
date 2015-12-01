@@ -28,10 +28,10 @@ namespace HandelserOchLjud
             }
             sizeOfField -= bordersize * 2;
         }
-        public Vector2 convertToVisualCoords(Vector2 coords, float scale, float? width = 0, float? height = 0)
+        public Vector2 convertToVisualCoords(Vector2 coords, float scale)
         {
-            float visualX = coords.X * sizeOfField + bordersize - ((float)width / 2) * scale;
-            float visualY = coords.Y * sizeOfField + bordersize - ((float)height / 2) * scale;
+            float visualX = coords.X * sizeOfField + bordersize;
+            float visualY = coords.Y * sizeOfField + bordersize;
             return new Vector2(visualX, visualY);
         }
         public Vector2 convertMousePosToLogicalCoords(Vector2 visualCoords)

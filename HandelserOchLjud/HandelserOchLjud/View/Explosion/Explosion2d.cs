@@ -46,7 +46,7 @@ namespace HandelserOchLjud.View.Explosion
 
             Rectangle rect = new Rectangle(frameWidth * frameX, frameHeight * frameY, frameWidth, frameHeight);
             float scale = _camera.Scale(size, frameWidth)*2;
-            _spriteBatch.Draw(_explosion, _camera.convertToVisualCoords(location, scale, frameWidth, frameHeight), rect, Color.White, 0, Vector2.Zero, scale, SpriteEffects.None, 1f);
+            _spriteBatch.Draw(_explosion, _camera.convertToVisualCoords(location, scale), rect, Color.White, 0, new Vector2(frameWidth/2, frameHeight/2), scale, SpriteEffects.None, 1f);
         }
     }
 }

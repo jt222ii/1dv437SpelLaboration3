@@ -8,8 +8,8 @@ namespace HandelserOchLjud.Model
 {
     class Ball
     {
-        float _radius = 0.05f;
-        float maxSpeed = 1f;
+        float _radius = 0.025f;
+        float maxSpeed = 0.7f;
         float minSpeed = 0.2f;
         Vector2 velocity;
         Vector2 _position;
