@@ -34,7 +34,7 @@ namespace HandelserOchLjud
         public void UpdateExplosion(float timeElapsed)
         {
             time += timeElapsed;
-            splitterSystem.Draw(timeElapsed);
+            splitterSystem.Update(timeElapsed);
             smokeSystem.Update(timeElapsed);
         }
         public void DrawExplosion(float timeElapsed)

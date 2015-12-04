@@ -35,13 +35,20 @@ namespace HandelserOchLjud.View.Explosion
         {
             foreach (SplitterParticle particle in particles)
             {
-                particle.move(timeElapsed);
                 particle.Draw();
             }
             timeLived += timeElapsed;
             if (timeLived >= particlesLifeTime)
             {
                 particles.Clear();
+            }
+        }
+
+        public void Update(float timeElapsed)
+        {
+            foreach (SplitterParticle particle in particles)
+            {
+                particle.move(timeElapsed);
             }
         }
 

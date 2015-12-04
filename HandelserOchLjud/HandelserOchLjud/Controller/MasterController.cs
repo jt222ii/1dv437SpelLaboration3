@@ -1,9 +1,11 @@
 ﻿using HandelserOchLjud.Model;
 using HandelserOchLjud.View;
+using HandelserOchLjud.View.Explosion;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Collections.Generic;
 
 namespace HandelserOchLjud.Controller
 {
@@ -16,9 +18,13 @@ namespace HandelserOchLjud.Controller
         SpriteBatch spriteBatch;
 
         GameView gameView;
+        ExplosionSystem explosionSystem;
         BallSimulation ballSimulation;
         Camera camera = new Camera();
         MouseState lastMouseState;
+
+        List<ExplosionView> explosions = new List<ExplosionView>();
+        List<SmokeSystem> smokes = new List<SmokeSystem>();
         public MasterController()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -26,8 +32,6 @@ namespace HandelserOchLjud.Controller
             graphics.PreferredBackBufferWidth = 900;  // set this value to the desired width of your window
             graphics.PreferredBackBufferHeight = 900;
             graphics.ApplyChanges();
-            //this.IsMouseVisible = true;
-
         }
 
         /// <summary>
@@ -54,7 +58,7 @@ namespace HandelserOchLjud.Controller
             spriteBatch = new SpriteBatch(GraphicsDevice);
             ballSimulation = new BallSimulation();
             gameView = new GameView(graphics, ballSimulation, Content, camera);
-
+            explosionSystem = new ExplosionSystem(camera, Content);
             // TODO: use this.Content to load your game content here
         }
 
@@ -80,10 +84,23 @@ namespace HandelserOchLjud.Controller
             var mouseState = Mouse.GetState();
             if (lastMouseState.LeftButton == ButtonState.Released && mouseState.LeftButton == ButtonState.Pressed)
             {
-                gameView.NewExplosion(mouseState.X, mouseState.Y, spriteBatch);
+                Vector2 logicalLocation = camera.convertMousePosToLogicalCoords(new Vector2(mouseState.X, mouseState.Y));
+                if (logicalLocation.X <= 1f && logicalLocation.X >= 0f && logicalLocation.Y <= 1f && logicalLocation.Y >= 0f)
+                {
+                    explosions.Add(explosionSystem.newExplosion(spriteBatch, logicalLocation, 0.5f));
+                    ballSimulation.setDeadBalls(logicalLocation.X, logicalLocation.Y, gameView.CrosshairSize / 2);
+                    foreach (Ball ball in ballSimulation.RecentlyKilledBalls)
+                    {
+                        smokes.Add(explosionSystem.newDeadBallSmoke(ball));
+                    }
+                }
             }
             lastMouseState = mouseState;
             // TODO: Add your update logic here
+            foreach(ExplosionView explosion in explosions)
+            {
+                explosion.UpdateExplosion((float)gameTime.ElapsedGameTime.TotalSeconds);
+            }
             ballSimulation.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
             base.Update(gameTime);
         }
@@ -94,9 +111,20 @@ namespace HandelserOchLjud.Controller
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
+
             GraphicsDevice.Clear(Color.CornflowerBlue);
             // TODO: Add your drawing code here
-            gameView.Draw(spriteBatch, (float)gameTime.ElapsedGameTime.TotalSeconds);
+            spriteBatch.Begin(SpriteSortMode.FrontToBack);
+            foreach(SmokeSystem smokeSystem in smokes)
+            {
+                smokeSystem.Draw(spriteBatch, camera);
+            }
+            foreach(ExplosionView explosion in explosions)
+            {
+                explosion.DrawExplosion((float)gameTime.ElapsedGameTime.TotalSeconds);
+            }
+            gameView.Draw(spriteBatch, (float)gameTime.ElapsedGameTime.TotalSeconds, smokes);
+            spriteBatch.End();
             base.Draw(gameTime);
         }
     }
